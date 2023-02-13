@@ -74,10 +74,27 @@ def process_sales_data(sales_csv, orders_dir):
 
         # Export the data to an Excel sheet
         sheet_name = f'Order{order_id}'
-        order_df.to_excel(order_file_path, sheet_name=sheet_name)
+        order_df.to_excel(order_file_path, index=False, sheet_name = sheet_name)
 
         # TODO: Format the Excel sheet
-        break
+        
+        
+        writer = pd.ExcelWriter("order_file_path", engine = 'xlsxwriter')
+
+
+        workbook = writer.book
+        worksheet = writer.sheets[sheet_name]
+
+        format1 = workbook.add_format({'num_format': '#,##0.00'})
+        format2 = workbook.add_format({'num_format': '$0'})
+
+        worksheet.set_column(1, 1, 18, format1)
+
+        worksheet.set_column(2, 2, None, format2)
+
+        writer.close
+
+        
 
 if __name__ == '__main__':
     main()
